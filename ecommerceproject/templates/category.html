@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block metadescription %}
+    {% if category %}
+        {{ category.description|truncatewords:155 }}
+    {% else %}
+        Welcome to ABC Store
+    {% endif %}
+{% endblock %}
+
+{% block title %}
+    {% if category %}
+        {{ category.name }} - ABC Store
+    {% else %}
+        See our new collection - ABC Store
+    {% endif %}
+    <div>
+        <div class="row my_row_class">
+            <div class="mx-auto">
+            <p><a href="{% url 'shop:allProdCat' %}" >Our product collections</a></p>
+        </div>
+            </div>
+    </div>
+{% endblock title %}
+{% block content %}
+   <div class="mx-auto">
+    {% if category %}
+
+        <img class="col-md-12 text-center my_image_new" src="{{category.image.url}}" alt="{{category.name}}">
+        </div>
+    <br>
+        <div>
+            <h1 class="text-center my_title">{{ category.name }}</h1>
+            <p class="text-justify">{{ category.description }}</p>
+        </div>
+    {% else %}
+        <div class="col-md-12 text-center">
+            <img class="my_image" src="{% static 'img/banner.png' %}" alt="Our products" >
+            <br>
+            <div>
+                <h1 class="text-center my_title">Our product collection</h1>
+                <p class="text-justify">
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+                    when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                    It has survived not only five centuries, but also the leap into electronic typesetting,
+                    remaining essentially unchanged. It wa
+                </p>
+            </div>
+        </div>
+    {% endif %}
+    <div class="container">
+    <div class="row mx_auto" style="display: flex; flex-wrap: wrap;">
+        {% for product in products.object_list %}
+            <div class="my_bottom_margin col-9 col-sm-12 col-md-4 col-lg-4" style="display: flex; flex-direction: column;">
+                    <div class="card text-center" style="min-width:18rem; flex-grow: 1;">
+                        <a href="{{product.get_url}}">
+                            <img class="card-img-top my_image" src="{{product.image.url}}" alt="{{product.name}}" style="max-width: 100%;">
+                        </a>
+
+                        <div class="card-body" style="flex-grow: 1; display: flex; flex-direction: column;">
+                            <h4>{{product.name}}</h4>
+                            <p>{{product.price}}</p>
+                        </div>
+
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
+        <div class=mx-auto"">
+            {% if products.paginator.num_pages > 1 %}
+
+            <hr>
+            <div class="text-center">
+                {% for pg in products.paginator.page_range %}
+                <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+            {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        <br>
+</div>
+{% endblock content %}
+
